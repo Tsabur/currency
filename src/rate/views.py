@@ -1,10 +1,11 @@
 # from django.shortcuts import render
-from bs4 import BeautifulSoup
+from itertools import zip_longest
 
-# import requests
+from bs4 import BeautifulSoup
 
 from selenium import webdriver
 
+# import requests
 # import html5lib
 # import lxml
 # import json
@@ -46,4 +47,16 @@ def parse_site_ukrsibbank():
             result_new += i
 
     result_new = result_new.replace('/', '', 4).replace(' ', '').replace(',', '').split('/')
-    return result_new
+    del result_new[8:]
+    list_usd = result_new[:3]
+    list_eur = result_new[4:7]
+
+    list_data = ['ccy', 'buy', 'sale']
+
+    usd = dict(zip_longest(list_data, list_usd))
+    eur = dict(zip_longest(list_data, list_eur))
+
+    data = []
+    data.append(usd)
+    data.append(eur)
+    return data

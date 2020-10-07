@@ -11,6 +11,9 @@ class Rate(models.Model):
         (1, 'PrivatBank'),
         (2, 'MonoBank'),
         (3, 'vkurse'),
+        (4, 'Ukrsibbank'),
+        (5, 'Aval'),
+        (6, 'Oschadbank'),
 
     )
 
