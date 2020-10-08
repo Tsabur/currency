@@ -1,24 +1,21 @@
 from django.db import models
 
+from rate import choices
+
 
 class Rate(models.Model):
-    CURRENCY_CHOISES = (
-        (1, 'USD'),
-        (2, 'EUR'),
-    )
-
-    SOURCE_CHOICES = (
-        (1, 'PrivatBank'),
-        (2, 'MonoBank'),
-        (3, 'vkurse'),
-        (4, 'Ukrsibbank'),
-        (5, 'Aval'),
-        (6, 'Oschadbank'),
-
-    )
-
-    currency = models.PositiveSmallIntegerField(choices=CURRENCY_CHOISES)
-    source = models.PositiveSmallIntegerField(choices=SOURCE_CHOICES)
+    currency = models.PositiveSmallIntegerField(choices=choices.CURRENCY_CHOISES)
+    source = models.PositiveSmallIntegerField(choices=choices.SOURCE_CHOICES)
     buy = models.DecimalField(max_digits=6, decimal_places=2)
     sale = models.DecimalField(max_digits=6, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
+
+
+class ContactUs(models.Model):
+    email = models.EmailField()
+    subject = models.CharField(max_length=128)
+    text = models.TextField()
+
+
+class Feedback(models.Model):
+    rating = models.PositiveSmallIntegerField()

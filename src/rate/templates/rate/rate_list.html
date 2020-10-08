@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">Buy</th>
+                            <th scope="col">Sale</th>
+                            <th scope="col">Source</th>
+                            <th scope="col">Update time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rate in rate_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ rate.get_currency_display }}</td>
+                            <td>{{ rate.buy }}</td>
+                            <td>{{ rate.sale }}</td>
+                            <td>{{ rate.get_source_display }}</td>
+                            <td>{{ rate.created }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock content %}
