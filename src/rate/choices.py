@@ -5,12 +5,20 @@ CURRENCY_CHOISES = (
     (CURRENCY_EUR, 'EUR'),
 )
 
+SOURCE_PRIVATBANK = 1
+SOURCE_MONOBANK = 2
+SOURCE_VKURSE = 3
+SOURCE_UKRSIBBANK = 4
+SOURCE_AVAL = 5
+SOURCE_OSCHADBANK = 6
 SOURCE_CHOICES = (
-    (1, 'PrivatBank'),
-    (2, 'MonoBank'),
-    (3, 'vkurse'),
-    (4, 'Ukrsibbank'),
-    (5, 'Aval'),
-    (6, 'Oschadbank'),
+    (SOURCE_PRIVATBANK, 'PrivatBank'),
+    (SOURCE_MONOBANK, 'MonoBank'),
+    (SOURCE_VKURSE, 'vkurse'),
+    (SOURCE_UKRSIBBANK, 'Ukrsibbank'),
+    (SOURCE_AVAL, 'Aval'),
+    (SOURCE_OSCHADBANK, 'Oschadbank'),
 
 )
+
+RATING_CHOICE = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10), )

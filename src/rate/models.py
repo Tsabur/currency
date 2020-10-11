@@ -18,4 +18,4 @@ class ContactUs(models.Model):
 
 
 class Feedback(models.Model):
-    rating = models.PositiveSmallIntegerField()
+    rating = models.PositiveSmallIntegerField(choices=choices.RATING_CHOICE)

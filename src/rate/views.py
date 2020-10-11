@@ -82,5 +82,6 @@ class CreateContactUsView(CreateView):
 
 
 class CreateFeedbackView(CreateView):
+    success_url = reverse_lazy('index')
     model = Feedback
-    fields = ('rating')
+    fields = ('rating', )
