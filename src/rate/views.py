@@ -1,12 +1,13 @@
-# from django.shortcuts import render
 from itertools import zip_longest
 
 from bs4 import BeautifulSoup
 
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, View
 
 from rate.models import ContactUs, Feedback, Rate
+from rate.selectors import get_latest_rates
 
 from selenium import webdriver
 
@@ -85,3 +86,17 @@ class CreateFeedbackView(CreateView):
     success_url = reverse_lazy('index')
     model = Feedback
     fields = ('rating', )
+
+
+class LatestRates(View):
+    def get(self, request):
+        context = {'rate_list': get_latest_rates()}
+        return render(request, 'rate/latest-rates.html', context=context)
+
+
+def my_custom_page_not_found_view(request, exception=None):
+    pass
+
+
+def my_custom_error_view(request, exception=None):
+    pass

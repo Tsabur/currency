@@ -3,17 +3,26 @@
     <li class="nav-item active">
       <a class="nav-link" href="{% url 'index' %}">Index</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{% url 'rate:list' %}">Rate List</a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'rate:list-latest' %}">Latest rates</a>
+    </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{% url 'rate:contact-us-create' %}">Contact Us</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{% url 'rate:feedback' %}">Feedback</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link disabled" href="#">Disabled</a>
     </li>
+
   </ul>
 </nav>
