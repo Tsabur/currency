@@ -3,6 +3,11 @@ from itertools import zip_longest
 
 from bs4 import BeautifulSoup
 
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
+
+from rate.models import ContactUs, Feedback, Rate
+
 from selenium import webdriver
 
 # import requests
@@ -60,3 +65,23 @@ def parse_site_ukrsibbank():
     data.append(usd)
     data.append(eur)
     return data
+
+
+class RateListView(ListView):
+    queryset = Rate.objects.all()
+
+
+class CreateContactUsView(CreateView):
+    success_url = reverse_lazy('index')
+    model = ContactUs
+    fields = ('email', 'subject', 'text')
+
+    # def form_valid(self, form):
+    #     #TODO send message
+    #     return super().form_valid(form)
+
+
+class CreateFeedbackView(CreateView):
+    success_url = reverse_lazy('index')
+    model = Feedback
+    fields = ('rating', )
