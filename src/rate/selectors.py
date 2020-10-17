@@ -5,7 +5,7 @@ from rate.models import Rate
 
 
 def get_latest_rates():
-    key = (get_latest_rates.__name__)
+    key = get_latest_rates.__name__
 
     if key in cache:
         rates = cache.get(key)
@@ -17,5 +17,5 @@ def get_latest_rates():
 
                 if rate is not None:
                     rates.append(rate)
-        cache.set(key, rates, 20)
+        cache.set(key, rates, 30)
     return rates

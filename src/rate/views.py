@@ -95,8 +95,8 @@ class LatestRates(View):
 
 
 def my_custom_page_not_found_view(request, exception=None):
-    pass
+    return render(request, template_name='errors/404.html')
 
 
 def my_custom_error_view(request, exception=None):
-    pass
+    return render(request, template_name='errors/500.html')
