@@ -28,3 +28,11 @@ urlpatterns = [
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
+
+handler404 = 'rate.views.my_custom_page_not_found_view'
+handler500 = 'rate.views.my_custom_error_view'
+
+# from django.utils.functional import curry
+# from django.views.defaults import server_error, page_not_found
+# handler404 = curry(page_not_found, template_name='errs/404.html')
+# handler500 = curry(server_error, template_name='errs/505.html')
