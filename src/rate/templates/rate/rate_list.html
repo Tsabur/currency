@@ -2,6 +2,10 @@
 
 
 {% block content %}
+    <div>{{ object_count }}</div>
+    <div><a href="{% url 'rate:list-csv'%}"> Download CSV </a></div>
+    <div><a href="{% url 'rate:list-xlsx'%}"> Download XLSX </a></div>
+<!--    <div>{{ object_list.count }}</div>-->
         <div class="row">
             <div class="col">
                 <table class="table">
