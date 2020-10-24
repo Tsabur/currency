@@ -1,22 +1,21 @@
+import csv
 from itertools import zip_longest
 
 from bs4 import BeautifulSoup
 
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, View
 
+from openpyxl import Workbook
+
 from rate.models import ContactUs, Feedback, Rate
 from rate.selectors import get_latest_rates
+from rate.utils import display
+
 
 from selenium import webdriver
-
-# import requests
-# import html5lib
-# import lxml
-# import json
-# from urllib.request import urlopen
-# import codecs
 
 
 def parse_site_ukrsibbank():
@@ -71,6 +70,11 @@ def parse_site_ukrsibbank():
 class RateListView(ListView):
     queryset = Rate.objects.all()
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['object_count'] = context['object_list'].count()
+        return context
+
 
 class CreateContactUsView(CreateView):
     success_url = reverse_lazy('index')
@@ -100,3 +104,91 @@ def my_custom_page_not_found_view(request, exception=None):
 
 def my_custom_error_view(request, exception=None):
     return render(request, template_name='errors/500.html')
+
+
+class CSVView(View):
+    headers = ['id', 'currency', 'source', 'buy', 'sale', 'created']
+
+    def get(self, request):
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        writer = csv.writer(response)
+
+        writer.writerow(self.headers)
+
+        # writer.writerow([
+        #     'ID',
+        #     'Currency',
+        #     'Source',
+        #     'Buy',
+        #     'Sale',
+        #     'Created',
+        # ])
+
+        for rate in Rate.objects.all().iterator():
+            writer.writerow(
+                [display(rate, header) for header in self.__class__.headers]
+            )
+
+        # for rate in Rate.objects.all().iterator():
+        #     writer.writerow([
+        #         rate.id,
+        #         rate.get_currency_display(),
+        #         rate.get_source_display(),
+        #         rate.buy,
+        #         rate.sale,
+        #         rate.created,
+        #     ])
+
+        return response
+
+
+class XLSXView(View):
+
+    def get(self, request):
+
+        rate_queryset = Rate.objects.all()
+
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
+        response['Content-Disposition'] = 'attachment; filename="rate.xlsx"'
+
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.title = 'Rate'
+
+        columns = [
+            'ID',
+            'Currency',
+            'Source',
+            'Buy',
+            'Sale',
+            'Created',
+        ]
+        row_num = 1
+
+        for col_num, column_title in enumerate(columns, 1):
+            cell = worksheet.cell(row=row_num, column=col_num)
+            cell.value = column_title
+
+        for rate in rate_queryset:
+            row_num += 1
+
+            row = [
+                rate.id,
+                rate.get_currency_display(),
+                rate.get_source_display(),
+                rate.buy,
+                rate.sale,
+                rate.created,
+            ]
+
+            for col_num, cell_value in enumerate(row, 1):
+                cell = worksheet.cell(row=row_num, column=col_num)
+                cell.value = cell_value
+
+        workbook.save(response)
+
+        return response
