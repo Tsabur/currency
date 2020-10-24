@@ -1,0 +1,1 @@
+CACHE_KEY_LATEST_RATE = 'sdfsd'

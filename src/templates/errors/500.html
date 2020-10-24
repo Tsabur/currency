@@ -1,11 +1,20 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/500_style.css' %}">
     <title>Title</title>
 </head>
 <body>
-    Server error
-    <a class='btn' href="{% url 'index' %}">Home</a>
+    <div class="wrapper">
+        <div class="box">
+            <h1>500</h1>
+            <p>Sorry, it's me, not you.</p>
+            <p>&#58;&#40;</p>
+            <p><a href="/">Let me try again!</a></p>
+        </div>
+    </div>
 </body>
 </html>
