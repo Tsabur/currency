@@ -17,7 +17,7 @@
                             <th scope="col">Sale</th>
                             <th scope="col">Source</th>
                             <th scope="col">Update time</th>
-                            {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
                                 <th scope="col">Update</th>
                                 <th scope="col">Delete</th>
                             {% endif %}
@@ -32,7 +32,7 @@
                             <td>{{ rate.sale }}</td>
                             <td>{{ rate.get_source_display }}</td>
                             <td>{{ rate.created }}</td>
-                            {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
                                 <td><a href="{% url 'rate:update' pk=rate.id %}">Update</a></td>
                                 <td><a href="{% url 'rate:delete' pk=rate.id %}">Delete</a></td>
                             {% endif %}

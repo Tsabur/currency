@@ -50,7 +50,7 @@ class Command(BaseCommand):
                         currency=currency,
                         created=created,
                     ).last()
-                    # save accounts if record was not found or sale or buy was changed
+                    # save rate if record was not found or sale or buy was changed
                     if last_rate is None:
                         rate = Rate.objects.create(
                             currency=currency,
