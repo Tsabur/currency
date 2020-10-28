@@ -43,6 +43,8 @@ def parse_site_ukrsibbank():
             value = cell.text
             result += value + '/'
 
+    browser.quit()
+
     result = result.lower()
     rus_dict = 'йцукенгшщзхъфывапролджэёячсмитьбю'
     result_new = ''
