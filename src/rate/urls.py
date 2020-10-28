@@ -11,5 +11,7 @@ urlpatterns = [
     path('contact-us/create/', views.CreateContactUsView.as_view(), name='contact-us-create'),
     path('feedback/', views.CreateFeedbackView.as_view(), name='feedback'),
     path('list/latest/', views.LatestRates.as_view(), name='list-latest'),
+    path('update/<int:pk>/', views.UpdateRate.as_view(), name='update'),
+    path('delete/<int:pk>/', views.DeleteRate.as_view(), name='delete'),
 
 ]

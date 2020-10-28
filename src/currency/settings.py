@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0%xq5l0l3yr$*u(li8njte$bnvwieitdgk6mj913yig978x#bp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'rate',
-
-
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -137,6 +136,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+AUTH_USER_MODEL = 'account.User'
 
 INTERNAL_IPS = [
     '127.0.0.1',

@@ -3,10 +3,11 @@ from itertools import zip_longest
 
 from bs4 import BeautifulSoup
 
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, View
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
 
 from openpyxl import Workbook
 
@@ -148,7 +149,7 @@ class XLSXView(View):
 
     def get(self, request):
 
-        rate_queryset = Rate.objects.all()
+        rate_queryset = Rate.objects.all().iterator()
 
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -192,3 +193,32 @@ class XLSXView(View):
         workbook.save(response)
 
         return response
+
+
+class UpdateRate(UserPassesTestMixin, UpdateView):
+    queryset = Rate.objects.all()
+    fields = ('currency', 'source', 'buy', 'sale')
+    success_url = reverse_lazy('rate:list')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    # def post(self, request, *args, **kwargs):
+    #     if self.request.user.is_superuser:
+    #         return super().post(request, *args, **kwargs)
+    #     else:
+    #         raise Resolver404
+
+
+class DeleteRate(UserPassesTestMixin, DeleteView):
+    queryset = Rate.objects.all()
+    success_url = reverse_lazy('rate:list')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    # def delete(self, request, *args, **kwargs):
+    #     if self.request.user.is_superuser:
+    #         return super().delete(self, request, *args, **kwargs)
+    #     else:
+    #         raise Resolver404
