@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0%xq5l0l3yr$*u(li8njte$bnvwieitdgk6mj913yig978x#bp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -136,6 +136,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static')
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -148,23 +149,23 @@ CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
     'privatbank': {
         'task': 'rate.tasks.parse_privatbank',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/59'),
     },
     'monobank': {
         'task': 'rate.tasks.parse_monobank',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/59'),
     },
     'vkurse': {
         'task': 'rate.tasks.parse_vkurse',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/59'),
     },
     'ukrsibbank': {
         'task': 'rate.tasks.parse_ukrsibbank',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/59'),
     },
     'aval': {
         'task': 'rate.tasks.parse_aval',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/59'),
     },
     'oschadbank': {
         'task': 'rate.tasks.parse_oschadbank',

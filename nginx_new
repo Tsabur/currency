@@ -1,0 +1,22 @@
+upstream django {
+    #server unix:/tmp/gunicorn.sock fail_timeout=0;
+    server 127.0.0.1:8000;
+    server 127.0.0.1:8001;
+}
+
+
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        server_name 127.0.0.1 example.com;
+
+        # /static/admin/css/login.css
+        location /static/ {
+            root /home/dima/projects/currency_3/static_content;
+        }
+
+        location / {
+            include /etc/nginx/proxy_params;
+            proxy_pass http://django;
+        }
+}
