@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 from celery import shared_task
 
-# from rate.views import parse_site_ukrsibbank
+from rate.views import parse_site_ukrsibbank
 
 import requests
 
@@ -105,23 +105,23 @@ def parse_vkurse():
             create_object(currency, source, buy, sale)
 
 
-# @shared_task
-# def parse_ukrsibbank():
-#     data = parse_site_ukrsibbank()
-#
-#     source = 4
-#     currency_map = {
-#         'usd': 1,
-#         'eur': 2,
-#     }
-#
-#     for row in data:
-#         if row['ccy'] in currency_map:
-#             buy = Decimal(row['buy']).quantize(TWOPLACES)
-#             sale = Decimal(row['sale']).quantize(TWOPLACES)
-#             currency = currency_map[row['ccy']]
-#
-#             create_object(currency, source, buy, sale)
+@shared_task
+def parse_ukrsibbank():
+    data = parse_site_ukrsibbank()
+
+    source = 4
+    currency_map = {
+        'usd': 1,
+        'eur': 2,
+    }
+
+    for row in data:
+        if row['ccy'] in currency_map:
+            buy = Decimal(row['buy']).quantize(TWOPLACES)
+            sale = Decimal(row['sale']).quantize(TWOPLACES)
+            currency = currency_map[row['ccy']]
+
+            create_object(currency, source, buy, sale)
 
 
 @shared_task

@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 from rate.models import Rate
-from rate.tasks import parse_aval, parse_monobank, parse_oschadbank, parse_privatbank, parse_vkurse
+from rate.tasks import parse_aval, parse_monobank, parse_oschadbank, parse_privatbank, parse_ukrsibbank, parse_vkurse
 
 
 def test_parse_privatbank(mocker):
@@ -88,4 +88,20 @@ def test_parse_oschadbank(mocker):
     assert Rate.objects.count() == count_rates + 2
 
     parse_oschadbank()
+    assert Rate.objects.count() == count_rates + 2
+
+
+def test_parse_ukrsibbank(mocker):
+    count_rates = Rate.objects.count()
+    with open('src/tests/parse_html/ukrsibbank.html', 'r', encoding='ISO-8859-1', errors='ignore') as file_ukrsibbank:
+        text_file = '\n'.join(file_ukrsibbank.readline())
+    requests_get_patcher = mocker.patch('requests.get')
+    requests_get_patcher.return_value = MagicMock(
+        status_code=200,
+        text=text_file
+    )
+    parse_ukrsibbank()
+    assert Rate.objects.count() == count_rates + 2
+
+    parse_ukrsibbank()
     assert Rate.objects.count() == count_rates + 2

@@ -82,7 +82,7 @@ def test_feedback_post_empty_data(client):
 def test_feedback_post_data(client):
     feedback_initial_count = Feedback.objects.count()
     url = reverse('rate:feedback')
-    data = {'rating': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+    data = {'rating': list(range(1, 11))}
     response = client.post(url, data=data)
     assert response.status_code == 302
     assert Feedback.objects.count() == feedback_initial_count + 1
