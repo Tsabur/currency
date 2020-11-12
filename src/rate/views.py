@@ -84,9 +84,9 @@ class CreateContactUsView(CreateView):
     model = ContactUs
     fields = ('email', 'subject', 'text')
 
-    # def form_valid(self, form):
-    #     #TODO send message
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        # TODO send message
+        return super().form_valid(form)
 
 
 class CreateFeedbackView(CreateView):

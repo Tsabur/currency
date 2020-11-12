@@ -1,0 +1,17 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+omit = src/manage.py,
+       */migrations/*,
+       */tests/*,
+       */account/*,
+       */currency/wsgi.py,
+       */rate/apps.py,
+       */rate/const.py,
+
+
+[report]
+precision = 4
+
+[html]
+directory = static_content/media/coverage

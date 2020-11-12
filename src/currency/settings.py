@@ -159,10 +159,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'rate.tasks.parse_vkurse',
         'schedule': crontab(minute='*/59'),
     },
-    'ukrsibbank': {
-        'task': 'rate.tasks.parse_ukrsibbank',
-        'schedule': crontab(minute='*/59'),
-    },
+    # 'ukrsibbank': {
+    #     'task': 'rate.tasks.parse_ukrsibbank',
+    #     'schedule': crontab(minute='*/59'),
+    # },
     'aval': {
         'task': 'rate.tasks.parse_aval',
         'schedule': crontab(minute='*/59'),
