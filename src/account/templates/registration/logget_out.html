@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col">
+        <form action="" method='POST'>
+            {% csrf_token %}
+            You Logout!
+            <a class='btn' href="{% url 'index' %}">Home</a>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

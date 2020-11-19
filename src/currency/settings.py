@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0%xq5l0l3yr$*u(li8njte$bnvwieitdgk6mj913yig978x#bp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -172,3 +172,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/5'),
     },
 }
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'example@ex.com'
+    DOMAIN = 'http://127.0.0.1:8000'

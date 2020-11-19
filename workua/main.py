@@ -171,7 +171,9 @@ def write_to_db(**kwargs):
     #         values = [f"'{i}'"]
 
     # print(f"INSERT INTO 'Jobs info' VALUES ({', '.join(values)})")
-    cursor.execute(f"INSERT INTO 'Jobs info' VALUES ({', '.join(values)})")
+
+    cursor.execute(f"INSERT INTO 'Jobs info' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", values)
+    # cursor.execute(f"INSERT INTO 'Jobs info' VALUES ({', '.join(values)})")
 
     conn.commit()
     conn.close()
