@@ -62,23 +62,25 @@ def test_parse_vkurse(mocker):
 def test_parse_aval(mocker):
     count_rates = Rate.objects.count()
     with open('src/tests/parse_html/avalbank.html', 'r', encoding='ISO-8859-1', errors='ignore') as file_aval:
-        text_file = '\n'.join(file_aval.readline())
+        # text_file = '\n'.join(file_aval.readline())
+        text_file = file_aval.read()
     requests_get_patcher = mocker.patch('requests.get')
     requests_get_patcher.return_value = MagicMock(
         status_code=200,
         text=text_file
     )
     parse_aval()
-    assert Rate.objects.count() == count_rates + 2
+    assert Rate.objects.count() == count_rates + 1
 
     parse_aval()
-    assert Rate.objects.count() == count_rates + 2
+    assert Rate.objects.count() == count_rates + 1
 
 
 def test_parse_oschadbank(mocker):
     count_rates = Rate.objects.count()
     with open('src/tests/parse_html/oschadbank.html', 'r', encoding='ISO-8859-1', errors='ignore') as file_oschadbank:
-        text_file = '\n'.join(file_oschadbank.readline())
+        # text_file = '\n'.join(file_oschadbank.readlines())
+        text_file = file_oschadbank.read()
     requests_get_patcher = mocker.patch('requests.get')
     requests_get_patcher.return_value = MagicMock(
         status_code=200,
@@ -94,7 +96,8 @@ def test_parse_oschadbank(mocker):
 def test_parse_ukrsibbank(mocker):
     count_rates = Rate.objects.count()
     with open('src/tests/parse_html/ukrsibbank.html', 'r', encoding='ISO-8859-1', errors='ignore') as file_ukrsibbank:
-        text_file = '\n'.join(file_ukrsibbank.readline())
+        # text_file = '\n'.join(file_ukrsibbank.readline())
+        text_file = file_ukrsibbank.read()
     requests_get_patcher = mocker.patch('requests.get')
     requests_get_patcher.return_value = MagicMock(
         status_code=200,
