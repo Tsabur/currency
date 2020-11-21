@@ -42,20 +42,26 @@ class UserRegistrationForm(forms.ModelForm):
         return instance
 
 
-class UserLoginForm(forms.ModelForm):
+class MyPasswordChangeForm(forms.ModelForm):
+
+    old_password = forms.CharField(widget=forms.PasswordInput)
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    re_new_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = (
-            'email',
-            'password',
-        )
+        fields = ('old_password', 'new_password', 're_new_password')
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.instance.check_password(cleaned_data['old_password']):
+            raise forms.ValidationError('Invalid old password')
+        if not self.errors:
+            if cleaned_data['new_password'] != cleaned_data['re_new_password']:
+                raise forms.ValidationError('Password do not match.')
+        return cleaned_data
 
-class UserChangePasswordForm(forms.ModelForm):
-    current_password = forms.CharField(widget=forms.PasswordInput)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-
-    class Meta:
-        fields = ('password1', 'password2')
+    def save(self):
+        self.instance.set_password(self.cleaned_data['new_password'])
+        self.instance.save()
+        return self.instance

@@ -1,8 +1,7 @@
-from account.forms import UserRegistrationForm
+from account.forms import MyPasswordChangeForm, UserRegistrationForm
 from account.models import User
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, View
@@ -44,19 +43,8 @@ class ActivateUser(View):
         return redirect('index')
 
 
-class LoginUserView(LoginView):
-    template_name = ('registration/login.html')
+class MyPasswordChangeView(UpdateView):
+    model = User
+    form_class = MyPasswordChangeForm
+    template_name = 'registration/password_change_form.html'
     success_url = reverse_lazy('index')
-
-
-class LogoutUserView(LogoutView):
-    template_name = ('registration/logget_out.html')
-
-
-class ChangePasswordUserView(PasswordChangeView):
-    template_name = ('registration/password_change_form.html')
-    success_url = reverse_lazy('account:password-change-done')
-
-
-class ChangePasswordUserDoneView(PasswordChangeDoneView):
-    template_name = ('registration/password_change_done.html')

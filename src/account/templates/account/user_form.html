@@ -3,7 +3,6 @@
 {% block content %}
         <div class="row">
             <div class="col">
-                <a href="{% url 'account:password-change' %}">Change password</a>
                 <form  method="post">
                     {% csrf_token %}
                     {{ form.as_p }}

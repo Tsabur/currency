@@ -176,3 +176,6 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'example@ex.com'
     DOMAIN = 'http://127.0.0.1:8000'
+
+
+LOGIN_REDIRECT_URL = 'account:my_profile'
