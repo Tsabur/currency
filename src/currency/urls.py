@@ -27,7 +27,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('rate/', include('rate.urls')),
     path('account/', include('account.urls')),
-    path('my_password_change/<int:pk>', views.MyPasswordChangeView.as_view(), name='my_password_change'),
+    path('my_password_change/<int:pk>/', views.MyPasswordChangeView.as_view(), name='my_password_change'),
 
 ]
 

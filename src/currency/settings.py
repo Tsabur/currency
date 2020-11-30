@@ -17,18 +17,16 @@ from celery.schedules import crontab
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0%xq5l0l3yr$*u(li8njte$bnvwieitdgk6mj913yig978x#bp'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['SERVER'] == 'dev'
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -78,23 +76,44 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'currency.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+if os.environ.get('Server') == 'dev':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': 'memcached:11211',  # for Docker
+            # 'LOCATION': '127.0.0.1:11211', # for local run
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://redis:6379/0',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -114,7 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -128,7 +146,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -136,7 +153,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static')
+STATIC_ROOT = os.path.join('/tmp', 'static_content', 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static') # for local run
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -144,38 +162,58 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://{0}:{1}@rabbitmq:5672//'.format(
+    os.environ.get('RABBITMQ_DEFAULT_USER', 'guest'),
+    os.environ.get('RABBITMQ_DEFAULT_PASS', 'guest'),
+)
+# CELERY_BROKER_URL = 'amqp://localhost' # for local run
 
 CELERY_BEAT_SCHEDULE = {
     'privatbank': {
         'task': 'rate.tasks.parse_privatbank',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/15'),
     },
     'monobank': {
         'task': 'rate.tasks.parse_monobank',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/15'),
     },
     'vkurse': {
         'task': 'rate.tasks.parse_vkurse',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/15'),
     },
     # 'ukrsibbank': {
     #     'task': 'rate.tasks.parse_ukrsibbank',
-    #     'schedule': crontab(minute='*/59'),
+    #     'schedule': crontab(minute='*/15'),
     # },
     'aval': {
         'task': 'rate.tasks.parse_aval',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/15'),
     },
     'oschadbank': {
         'task': 'rate.tasks.parse_oschadbank',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/15'),
     },
 }
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'example@ex.com'
-    DOMAIN = 'http://127.0.0.1:8000'
+    DOMAIN = 'http://127.0.0.1:8001'
 
+    # debug tool_bar
+    import socket
+
+    DEBUG_TOOLBAR_PATCH_SETTINGS = True
+    INTERNAL_IPS = ['127.0.0.1']
+
+    # tricks to have debug toolbar when developing with docker
+    ip = socket.gethostbyname(socket.gethostname())
+    ip = '.'.join(ip.split('.')[:-1])
+    ip = f'{ip}.1'
+    INTERNAL_IPS.append(ip)
+
+# try:
+#     from currency.settings_local import *
+# except ImportError:
+#     print('Local Settings Import Error\n' * 10)
 
 LOGIN_REDIRECT_URL = 'account:my_profile'
