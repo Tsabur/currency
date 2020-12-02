@@ -83,6 +83,7 @@ services:
 
   portainer:
     image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
     ports:
       - "8100:8000"
       - "9100:9000"

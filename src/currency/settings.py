@@ -156,6 +156,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join('/tmp', 'static_content', 'static')
 # STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static') # for local run
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_content')
+
 AUTH_USER_MODEL = 'account.User'
 
 INTERNAL_IPS = [
