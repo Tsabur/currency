@@ -16,6 +16,7 @@ Including another URLconf
 from account import views
 
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
@@ -28,8 +29,7 @@ urlpatterns = [
     path('rate/', include('rate.urls')),
     path('account/', include('account.urls')),
     path('my_password_change/<int:pk>/', views.MyPasswordChangeView.as_view(), name='my_password_change'),
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

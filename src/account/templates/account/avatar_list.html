@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for avatar in object_list %}
+<div>
+    <img src="{{ avatar.file_path.url }}">
+</div>
+<br/>
+{% endfor %}
+{% endblock content %}
