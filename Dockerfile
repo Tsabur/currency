@@ -9,7 +9,7 @@ WORKDIR /srv/project
 
 COPY requirements.txt /tmp/requirements.txt
 
-RUN -m pip install --upgrade pip && \
+RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
