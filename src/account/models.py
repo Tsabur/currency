@@ -33,6 +33,6 @@ class Avatar(models.Model):
         # You have to prepare what you need before delete the model
         storage, path = self.file_path.storage, self.file_path.path
         # Delete the model before the file
-        super(Avatar, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         # Delete the file after the model
         storage.delete(path)

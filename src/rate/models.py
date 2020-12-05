@@ -5,11 +5,16 @@ from rate import choices
 
 
 class Rate(models.Model):
-    currency = models.PositiveSmallIntegerField(choices=choices.CURRENCY_CHOISES)
+    currency = models.PositiveSmallIntegerField(choices=choices.CURRENCY_CHOISES, db_index=True)
     source = models.PositiveSmallIntegerField(choices=choices.SOURCE_CHOICES)
     buy = models.DecimalField(max_digits=6, decimal_places=2)
     sale = models.DecimalField(max_digits=6, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        index_together = (
+            ('currency', 'source'),
+        )
 
     # def save(self, *args, **kwargs):
     #     super().save(*args, **kwargs)

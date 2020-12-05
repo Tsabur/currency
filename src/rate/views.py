@@ -7,14 +7,16 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
+from django.views.generic import CreateView, DeleteView, UpdateView, View
+
+from django_filters.views import FilterView
 
 from openpyxl import Workbook
 
+from rate.filters import RateFilter
 from rate.models import ContactUs, Feedback, Rate
 from rate.selectors import get_latest_rates
 from rate.utils import display
-
 
 from selenium import webdriver
 
@@ -70,11 +72,19 @@ def parse_site_ukrsibbank():
     return data
 
 
-class RateListView(ListView):
+class RateListView(FilterView):
     queryset = Rate.objects.all()
+    paginate_by = 10
+    filterset_class = RateFilter
+    template_name = 'rate/rate_list.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        context['GET_PARAMS'] = '&'.join(
+            f'{key}={value}'
+            for key, value in self.request.GET.items()
+            if key != 'page'
+        )
         context['object_count'] = context['object_list'].count()
         return context
 
@@ -92,7 +102,7 @@ class CreateContactUsView(CreateView):
 class CreateFeedbackView(CreateView):
     success_url = reverse_lazy('index')
     model = Feedback
-    fields = ('rating', )
+    fields = ('rating',)
 
 
 class LatestRates(View):
