@@ -3,3 +3,5 @@ __pycache__/
 .idea/
 static_content/
 **/settings_local.py
+*/media_content/
+venv

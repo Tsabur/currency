@@ -23,4 +23,13 @@ shell:
 bash:
 	docker exec -it backend bash
 
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down
+
+show_urls:
+	docker exec -it backend python ./src/manage.py show_urls
+
 build: start migrate collectstatic
