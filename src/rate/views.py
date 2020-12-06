@@ -85,6 +85,8 @@ class RateListView(FilterView):
             for key, value in self.request.GET.items()
             if key != 'page'
         )
+        for key, value in self.request.GET.items():
+            context[key] = value
         context['object_count'] = context['object_list'].count()
         return context
 

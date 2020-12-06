@@ -18,12 +18,15 @@
     </ul>
 
     <div class="form-group input-group-sm" style="display:inline-block; float:left; margin-left:10px;">
-            <form>
-                <a>Go to Page</a>
-                <input size="3" type="text" name="page">
-                <a>of {{ page_obj.paginator.num_pages }}</a>
-                <input type="submit">
-            </form>
+        <form method="get">
+            <a>Go to Page</a>
+            <input size="3" type="text" name="page" value="{{ text }}">
+            <a>of {{ page_obj.paginator.num_pages }}</a>
+            <input type="submit">
+            <input type="hidden" name="source" value="{{ source }}">
+            <input type="hidden" name="currency" value="{{ currency }}">
+            <input type="hidden" name="date" value="{{ date }}">
+        </form>
     </div>
 
 </nav>
