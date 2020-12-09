@@ -2,44 +2,51 @@
 
 
 {% block content %}
-    <div>{{ object_count }}</div>
-    <div><a href="{% url 'rate:list-csv'%}"> Download CSV </a></div>
-    <div><a href="{% url 'rate:list-xlsx'%}"> Download XLSX </a></div>
+<div>{{ object_count }}</div>
+<div><a href="{% url 'rate:list-csv'%}"> Download CSV </a></div>
+<div><a href="{% url 'rate:list-xlsx'%}"> Download XLSX </a></div>
 <!--    <div>{{ object_list.count }}</div>-->
-        <div class="row">
-            <div class="col">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">№</th>
-                            <th scope="col">Currency</th>
-                            <th scope="col">Buy</th>
-                            <th scope="col">Sale</th>
-                            <th scope="col">Source</th>
-                            <th scope="col">Update time</th>
-                            {% if request.user.is_superuser %}
-                                <th scope="col">Update</th>
-                                <th scope="col">Delete</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for rate in rate_list %}
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ rate.get_currency_display }}</td>
-                            <td>{{ rate.buy }}</td>
-                            <td>{{ rate.sale }}</td>
-                            <td>{{ rate.get_source_display }}</td>
-                            <td>{{ rate.created }}</td>
-                            {% if request.user.is_superuser %}
-                                <td><a href="{% url 'rate:update' pk=rate.id %}">Update</a></td>
-                                <td><a href="{% url 'rate:delete' pk=rate.id %}">Delete</a></td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="row">
+    <div class="col">
+
+        {% include 'parts/filter.html' %}
+
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Buy</th>
+                <th scope="col">Sale</th>
+                <th scope="col">Source</th>
+                <th scope="col">Update time</th>
+                {% if request.user.is_superuser %}
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for rate in rate_list %}
+            <tr>
+                <!--                <th scope="row">{{ forloop.counter }}</th>-->
+                <th scope="row">{{ rate.id }}</th>
+                <td>{{ rate.get_currency_display }}</td>
+                <td>{{ rate.buy }}</td>
+                <td>{{ rate.sale }}</td>
+                <td>{{ rate.get_source_display }}</td>
+                <td>{{ rate.created }}</td>
+                {% if request.user.is_superuser %}
+                <td><a href="{% url 'rate:update' pk=rate.id %}">Update</a></td>
+                <td><a href="{% url 'rate:delete' pk=rate.id %}">Delete</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'parts/pagination_bootstrap.html' %}
+
+    </div>
+</div>
 {% endblock content %}
