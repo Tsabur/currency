@@ -9,6 +9,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     email = models.EmailField('email address', blank=False, null=False, unique=True)
 
+    class Meta:
+        permissions = [
+            ("full_edit", "This permissions allows user to update all available fields in User model")
+        ]
+
     def active_avatar(self) -> str:
         avatar = self.avatar_set.get()
         avatar_url = avatar.file_path.url
@@ -28,6 +33,10 @@ class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     file_path = models.FileField(upload_to=user_avatar_upload)
     # file_path = models.ImageField(upload_to='avatars/')
+    is_active = models.BooleanField(default=False)
+
+    # def __str__(self):
+    #     return f'ID {self.id}, is_active: {self.is_active}, user: {self.user_id}'
 
     def delete(self, *args, **kwargs):
         # You have to prepare what you need before delete the model
